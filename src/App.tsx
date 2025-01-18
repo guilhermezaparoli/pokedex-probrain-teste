@@ -1,26 +1,19 @@
+import GlobalStyle from './styles/themes/GlobalStyle';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './styles/themes/default';
+import { BrowserRouter } from 'react-router-dom';
 
-import { Header } from "./components/Layout/Header"
-
-
-import { Body } from "./components/Layout/Body"
-import GlobalStyle from "./styles/themes/GlobalStyle"
-import { ThemeProvider } from "@mui/material"
-import { theme } from "./styles/themes/default"
-
-
+import { AppRoutes } from './routes';
 
 export function App() {
-
-
   return (
     <>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle/>
-      <Header/>
-      <Body />
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </ThemeProvider>
     </>
-  )
+  );
 }
-
-
