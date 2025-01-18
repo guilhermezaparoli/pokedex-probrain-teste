@@ -1,6 +1,7 @@
 import { styled, keyframes } from "@mui/material/styles";
 import Popup from "reactjs-popup";
 import { PokemonTypes } from "../../@types/PokemonTypes";
+import zIndex from "@mui/material/styles/zIndex";
 
 const fadeDown = keyframes`
   from {
@@ -28,6 +29,8 @@ export const StyledMainContainer = styled("div", {
   "@media (max-width: 768px)": {
     width: "20rem",
   },
+  zIndex: 2
+
 }));
 
 export const Card = styled("div")<PokemonTypes>(({ theme, color }) => ({
@@ -121,6 +124,7 @@ export const MoreDetails = styled("button", {
   alignItems: "center",
   justifyContent: "center",
   backgroundColor: theme.palette[color]?.main,
+  cursor: "pointer",
   marginTop: "40px",
   "> p": {
     color: theme.palette.primary.main,

@@ -11,6 +11,7 @@ import {
 import BoltIcon from '../../assets/icon-bolt.svg';
 import { CardType } from '../CardType';
 import { PokemonCard } from '../../@types/PokemonCard';
+import { useNavigate } from 'react-router-dom';
 
 interface CardPokemonProps {
   pokemonData: PokemonCard;
@@ -24,6 +25,7 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
   const mouseYSpring = useSpring(y)
   const rotateX = useTransform(mouseXSpring, [1, -1], ["25deg", "-25deg"])
   const rotateY = useTransform(mouseYSpring, [1, -1], ["-25deg", "25deg"])
+  const navigate = useNavigate()
   function handleMouseMove(e: MouseEvent) {
     const target = e.target as HTMLElement;
     const rect = target.getBoundingClientRect();
@@ -74,6 +76,7 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
         </Type>
         <MoreDetails
           color={pokemonTypes[0]}
+          onClick={() => navigate(`/${pokemonData.id}`)}
         >
           <IconTextContainer>
             <img src={BoltIcon} alt="" />

@@ -73,14 +73,20 @@ export function Body() {
   }
 
   async function getCardsByType(type: string, currentPage: number) {
-    const { data, pageSize, totalCount, page } = await fetchCardsByType(
-      type,
-      currentPage
-    );
-    const totalPages = Math.ceil(totalCount / pageSize);
-    setPokemons(data);
-    setTotalPages(totalPages);
-    setCurrentPage(page);
+    try {
+      const { data, pageSize, totalCount, page } = await fetchCardsByType(
+        type,
+        currentPage
+      );
+      const totalPages = Math.ceil(totalCount / pageSize);
+      setPokemons(data);
+      setTotalPages(totalPages);
+      setCurrentPage(page);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function getCardsByPage(currentPage: number) {
@@ -181,6 +187,8 @@ export function Body() {
             showFirstButton
             showLastButton
             onChange={(e, value) => {
+              setLoading(true);
+
               if (typeSelected) {
                 getCardsByType(typeSelected, value);
               } else {
