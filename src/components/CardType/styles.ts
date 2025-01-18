@@ -1,66 +1,41 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
+import { PokemonTypes } from "../../@types/PokemonTypes";
 
 
-export const STATUS_COLORS = {
-  Darkness: "type-dark",
-  Dragon: "type-dragon",
-  Lightning: "type-electric",
-  Fairy: "type-fairy",
-  Fighting: "type-fighting",
-  Fire: "type-fire",
-  Grass: "type-grass",
-  Colorless: "type-normal",
-  Psychic: "type-psychic",
-  Metal: "type-steel",
-  Water: "type-water",
-} as const;
-
-export interface StatusProps {
-  statusColor:
-    | "Darkness"
-    | "Dragon"
-    | "Lightning"
-    | "Fairy"
-    | "Fighting"
-    | "Fire"
-    | "grass"
-    | "Colorless"
-    | "Psychic"
-    | "Metal"
-    | "water";
+interface StyledContainerProps {
   isSelected: boolean;
+  statusColor: PokemonTypes
 }
+export const StyledContainer = styled("button")<StyledContainerProps>(({ theme, isSelected, statusColor }) => ({
+  backgroundColor: isSelected
+    ? theme.palette[statusColor]?.main || "#060F39"
+    : "#060F39",
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  padding: "4px 8px",
+  borderRadius: "8px",
+  border: "1px solid transparent",
+  transition: "0.3s",
+  color:theme.palette.primary.main ,
 
+  "& p": {
+    color: theme.palette.primary.main,
+    fontSize: "1rem",
+    lineHeight: "1.5",
+    textTransform: "capitalize",
+  },
 
-export const StyledContainer = styled.button<StatusProps>`
-background-color: ${props => props.isSelected ? props.theme[STATUS_COLORS[props.statusColor]]  : `#060F39`};
+  "& svg path": {
+    transition: "0.3s",
+    fill: isSelected
+      ? theme.palette.primary.main
+      : theme.palette[statusColor]?.main || theme.palette.primary.main,
+  },
 
-
-display: flex;
-align-items: center;
-gap: 8px;
-
-padding: 4px 8px;
-border-radius: 8px;
-border: 1px solid transparent;
-transition: 0.3s;
-
-p {
-  color: ${props => props.theme.white} ;
-  font-size: 1rem;
-  line-height: 1.5;
-
-  text-transform: capitalize;
-}
-
-svg path {
-transition: 0.3s;
-  fill: ${props => props.isSelected ? props.theme.white : props.theme[STATUS_COLORS[props.statusColor]]};
-}
-
-&:hover {
-  border: 1px solid  ${props => props.theme[STATUS_COLORS[props.statusColor]]}
-
-}
-
-`
+  "&:hover": {
+    border: `1px solid ${
+      theme.palette[statusColor]?.main || theme.palette.primary.main
+    }`,
+  },
+}));

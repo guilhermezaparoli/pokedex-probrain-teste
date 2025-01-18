@@ -17,6 +17,7 @@ interface CardPokemonProps {
 }
 
 export function CardPokemon({ pokemonData }: CardPokemonProps) {
+  const pokemonTypes = pokemonData.types || ""
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x)
@@ -60,10 +61,10 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
           />
         </motion.div>
       
-      <Card color={pokemonData?.types?.[0]}>
+      <Card color={pokemonTypes[0]}>
         <PokemonName>{pokemonData.name}</PokemonName>
         <Type>
-          {pokemonData.types.length > 0 && pokemonData.types.map((item) => (
+          {pokemonTypes.length > 0 && pokemonTypes.map((item) => (
             <CardType
               key={item}
               value={item}
@@ -73,7 +74,7 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
           ))}
         </Type>
         <MoreDetails
-          color={pokemonData?.types?.[0]}
+          color={pokemonTypes[0]}
         >
           <IconTextContainer>
             <img src={BoltIcon} alt="" />
