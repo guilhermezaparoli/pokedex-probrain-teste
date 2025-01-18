@@ -46,7 +46,6 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
     y.set(0)
   }
 
-  console.log(pokemonData, "pokemonDatapokemonData");
   return (
     <StyledMainContainer>
   

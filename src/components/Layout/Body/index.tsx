@@ -1,7 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import GifPikachuCrying from '../../../assets/gif/pikachu-crying.gif';
-
 import { CardPokemon } from '../../CardPokemon';
 import {
   ButtonSearch,
@@ -16,6 +14,7 @@ import {
   SearchContainer,
   StyledContainerBody,
   StyledLoader,
+  StyledPagination,
   StyledPokeballIcon,
   TextPokemonNotFound,
   TypeSearch,
@@ -23,7 +22,6 @@ import {
 } from './styles';
 import {
   getAllPokemonCards,
-  fetchCardById,
   fetchCardByName,
   fetchCardsByType,
   fetchTypes,
@@ -31,45 +29,23 @@ import {
 import { CardType } from '../../CardType';
 import IconSearch from '../../../assets/icon-search.svg';
 import PokeballIcon from '../../../assets/pokeball-icon-colored.svg';
-import { STATUS_COLORS } from '../../CardType/styles';
+import { useDebounce } from '../../../utils/debounce';
 import { PokemonCard } from '../../../@types/PokemonCard';
-export interface PokemonType {
-  type: {
-    name:
-      | 'bug'
-      | 'dark'
-      | 'electric'
-      | 'fairy'
-      | 'fighting'
-      | 'dragon'
-      | 'fire'
-      | 'flying'
-      | 'ghost'
-      | 'grass'
-      | 'ground'
-      | 'ice'
-      | 'normal'
-      | 'poison'
-      | 'psychic'
-      | 'rock'
-      | 'steel'
-      | 'water';
-  };
-}
 
 export function Body() {
   const [pokemons, setPokemons] = useState<PokemonCard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchByUser, setSearchByUser] = useState<string>('');
-  const [isSelected, setIsSelected] = useState<string>('');
-
-  const [types, setTypes] = useState([]);
+  const [typeSelected, setTypeSelected] = useState<string>('');
+  const [allTypes, setAllTypes] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        setTypes(await fetchTypes());
-        setPokemons(await getAllPokemonCards());
+        setAllTypes(await fetchTypes());
+        getCardsByPage(currentPage);
       } catch (error) {
         console.log(error);
       }
@@ -79,44 +55,73 @@ export function Body() {
   }, []);
 
   async function onSelectType(type: string) {
-    if (isSelected !== type) {
-      setIsSelected(type);
+    if (typeSelected !== type) {
+      setTypeSelected(type);
       setLoading(true);
 
       try {
-        setPokemons(await fetchCardsByType(type, 1, 9));
+        await getCardsByType(type, 1);
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
       }
     } else {
-      setIsSelected('');
-
-      try {
-        setPokemons(await getAllPokemonCards(1, 9));
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+      setTypeSelected('');
+      getCardsByPage(currentPage);
     }
   }
 
-  async function onSearchByUser(e: ChangeEvent) {
-    const value = e.target.value
-    setSearchByUser(value)
-    setLoading(true)
-   if(value){
+  async function getCardsByType(type: string, currentPage: number) {
+    const { data, pageSize, totalCount, page } = await fetchCardsByType(
+      type,
+      currentPage
+    );
+    const totalPages = Math.ceil(totalCount / pageSize);
+    setPokemons(data);
+    setTotalPages(totalPages);
+    setCurrentPage(page);
+  }
+
+  async function getCardsByPage(currentPage: number) {
+    setLoading(true);
     try {
-      console.log(await fetchCardByName(value), "await fetchCardByName(value)");
-      setPokemons(await fetchCardByName(value));
+      const { data, pageSize, totalCount, page } = await getAllPokemonCards(
+        currentPage
+      );
+      const totalPages = Math.ceil(totalCount / pageSize);
+      setPokemons(data);
+      setTotalPages(totalPages);
+      setCurrentPage(page);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-   }
+  }
+
+  async function handleSearch(value: string) {
+    setLoading(true);
+    if (value) {
+      try {
+        const fetchedCards = await fetchCardByName(value);
+        setPokemons(fetchedCards);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      getCardsByPage(currentPage);
+    }
+  }
+
+  const debouncedSearch = useDebounce(handleSearch, 500);
+
+  function onSearchByUser(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setSearchByUser(value);
+    debouncedSearch(value);
   }
 
   return (
@@ -138,13 +143,13 @@ export function Body() {
         <TypeSearch>
           <p>Filtro por tipo</p>
           <Types>
-            {types.map((type, index) => {
+            {allTypes.map((type, index) => {
               return (
                 <CardType
                   key={index}
-                  value={type as keyof typeof STATUS_COLORS}
+                  value={type}
                   onClick={() => onSelectType(type)}
-                  isSelected={type === isSelected}
+                  isSelected={type === typeSelected}
                 />
               );
             })}
@@ -164,10 +169,26 @@ export function Body() {
       ) : pokemons.length > 0 ? (
         <>
           <ContainerCards>
-            {pokemons.length > 0  && pokemons.map((pokemon) => (
-              <CardPokemon key={pokemon.id} pokemonData={pokemon} />
-            ))}
+            {pokemons.length > 0 &&
+              pokemons.map((pokemon) => (
+                <CardPokemon key={pokemon.id} pokemonData={pokemon} />
+              ))}
           </ContainerCards>
+          <StyledPagination
+            size="large"
+            count={totalPages}
+            page={currentPage}
+            showFirstButton
+            showLastButton
+            onChange={(e, value) => {
+              if (typeSelected) {
+                getCardsByType(typeSelected, value);
+              } else {
+                getCardsByPage(value);
+              }
+              scrollTo({ top: 500, behavior: 'smooth' });
+            }}
+          />
         </>
       ) : (
         <PokemonNotFound>

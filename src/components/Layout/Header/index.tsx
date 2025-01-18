@@ -25,7 +25,7 @@ export function Header() {
           </a>
           
             
-            <LinkDocumentation href="/documentação">
+            <LinkDocumentation href="https://docs.pokemontcg.io/" target="_blank">
             Documentação
             </LinkDocumentation>
           

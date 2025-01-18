@@ -1,29 +1,74 @@
-export const defaultTheme = {
-  white: "#ffff",
-  "type-fire": "#FF9900",
-  "type-flying": "#89BDFF",
-  "type-bug": "#7BCF00",
-  "type-dark": "#5A566A",
-  "type-dragon": "#0076FF",
-  "type-electric": "#FFDE00",
-  "type-grass": "#1CD80E",
-  "type-poison": "#F149FF",
-  "type-water": "#14A8FF",
-  'type-fairy': '#ff76ff',
-  'type-fighting': '#ff215b',
-  'type-ghost': '#4e6aff',
-  'type-ground': '#ff6b0d',
-  'type-ice': '#2ee4c6',
-  'type-normal': '#9fa39d',
-  'type-psychic': '#ff6c64',
-  'type-rock': '#d8bc5a',
-  'type-steel': '#23a1bd',
-  
+import { createTheme, PaletteColor, PaletteColorOptions } from "@mui/material";
 
+// Estendendo as interfaces do Material-UI para incluir todas as cores personalizadas.
+declare module "@mui/material/styles" {
+  interface Palette {
+    Fire: PaletteColor;
+    Darkness: PaletteColor;
+    Dragon: PaletteColor;
+    Lightning: PaletteColor;
+    Grass: PaletteColor;
+    Water: PaletteColor;
+    Fairy: PaletteColor;
+    Fighting: PaletteColor;
+    Colorless: PaletteColor;
+    Psychic: PaletteColor;
+    Metal: PaletteColor;
+  }
 
+  interface PaletteOptions {
+    Fire?: PaletteColorOptions;
+    Darkness?: PaletteColorOptions;
+    Dragon?: PaletteColorOptions;
+    Lightning?: PaletteColorOptions;
+    Grass?: PaletteColorOptions;
+    Water?: PaletteColorOptions;
+    Fairy?: PaletteColorOptions;
+    Fighting?: PaletteColorOptions;
+    Colorless?: PaletteColorOptions;
+    Psychic?: PaletteColorOptions;
+    Metal?: PaletteColorOptions;
+  }
+}
 
-  "input-color": "#2F5AFF",
-  "place-holder-color": "rgba(255, 255, 255, 0.25)",
-  "pokemon-card-border": "#24293F",
-  "container-modal": '#555',
-};
+// Criando o tema MUI com as cores do antigo `defaultTheme`
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#fff"
+    },
+    Fire: {
+      main: "#FF9900",
+    },
+    Darkness: {
+      main: "#5A566A",
+    },
+    Dragon: {
+      main: "#0076FF",
+    },
+    Lightning: {
+      main: "#FFDE00",
+    },
+    Grass: {
+      main: "#1CD80E",
+    },
+    Water: {
+      main: "#14A8FF",
+    },
+    Fairy: {
+      main: "#FF76FF",
+    },
+    Fighting: {
+      main: "#FF215B",
+    },
+    Colorless: {
+      main: "#9FA39D",
+    },
+    Psychic: {
+      main: "#FF6C64",
+    },
+    Metal: {
+      main: "#23A1BD",
+    },
+  },
+});
