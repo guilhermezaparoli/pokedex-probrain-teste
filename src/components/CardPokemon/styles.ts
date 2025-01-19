@@ -42,6 +42,7 @@ export const Card = styled("div")<PokemonTypes>(({ theme, color }) => ({
   overflow: "hidden",
   borderRadius: "24px",
   position: "relative",
+  minHeight: "250px",
   zIndex: -1,
   "&::after": {
     content: "''",
@@ -143,3 +144,16 @@ export const Dialog = styled("div")(({ theme }) => ({
   backgroundColor: "#24293F",
   borderRadius: "24px",
 }));
+
+export const StyledPopup = styled(Popup)`
+  &-overlay {
+    background: rgba(0, 0, 0, 0.85);
+
+  }
+
+  @media (max-width: 768px) {
+    &-overlay {
+      overflow: auto;
+    }
+  }
+`;

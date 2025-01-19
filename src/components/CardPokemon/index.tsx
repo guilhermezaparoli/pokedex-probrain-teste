@@ -1,23 +1,27 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
   Card,
+  Dialog,
   IconTextContainer,
   MoreDetails,
   PokemonImage,
   PokemonName,
   StyledMainContainer,
+  StyledPopup,
   Type,
 } from './styles';
 import BoltIcon from '../../assets/icon-bolt.svg';
 import { CardType } from '../CardType';
 import { PokemonCard } from '../../@types/PokemonCard';
-import { useNavigate } from 'react-router-dom';
+import { ModalPokemon } from '../ModalCard';
+import { useState } from 'react';
 
 interface CardPokemonProps {
   pokemonData: PokemonCard;
+  modal: boolean
 }
 
-export function CardPokemon({ pokemonData }: CardPokemonProps) {
+export function CardPokemon({ pokemonData, modal }: CardPokemonProps) {
   const pokemonTypes = pokemonData.types || ""
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -25,7 +29,8 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
   const mouseYSpring = useSpring(y)
   const rotateX = useTransform(mouseXSpring, [1, -1], ["25deg", "-25deg"])
   const rotateY = useTransform(mouseYSpring, [1, -1], ["-25deg", "25deg"])
-  const navigate = useNavigate()
+
+  const [openModal, setOpenModal] = useState(false)
   function handleMouseMove(e: MouseEvent) {
     const target = e.target as HTMLElement;
     const rect = target.getBoundingClientRect();
@@ -57,7 +62,7 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
           onMouseLeave={handleMouseLeave}
         >
           <PokemonImage
-            src={pokemonData.images.large}
+            src={pokemonData?.images?.large}
             alt={pokemonData.name}
           />
         </motion.div>
@@ -74,7 +79,7 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
             />
           ))}
         </Type>
-        <MoreDetails
+        {/* <MoreDetails
           color={pokemonTypes[0]}
           onClick={() => navigate(`/${pokemonData.id}`)}
         >
@@ -82,7 +87,38 @@ export function CardPokemon({ pokemonData }: CardPokemonProps) {
             <img src={BoltIcon} alt="" />
             <p>Mais detalhes</p>
           </IconTextContainer>
-        </MoreDetails>
+        </MoreDetails> */}
+
+
+{modal || (
+          <>
+            <MoreDetails
+              color={pokemonData?.types?.[0]}
+              onClick={() => setOpenModal(true)}
+            >
+              <IconTextContainer>
+                <img src={BoltIcon} alt="" />
+                <p>More Details</p>
+              </IconTextContainer>
+            </MoreDetails>
+            <StyledPopup
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+              modal
+              nested
+              lockScroll
+            >
+              <Dialog>
+                <ModalPokemon
+                  pokemonData={pokemonData}
+                  close={() => {
+                    setOpenModal(false);
+                  }}
+                />
+              </Dialog>
+            </StyledPopup>
+          </>
+        )}
       </Card>
     </StyledMainContainer>
   );
