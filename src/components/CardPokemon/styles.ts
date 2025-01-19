@@ -1,7 +1,6 @@
 import { styled, keyframes } from "@mui/material/styles";
 import Popup from "reactjs-popup";
 import { PokemonTypes } from "../../@types/PokemonTypes";
-import zIndex from "@mui/material/styles/zIndex";
 
 const fadeDown = keyframes`
   from {
@@ -143,15 +142,4 @@ export const Dialog = styled("div")(({ theme }) => ({
   margin: "14rem 0 7rem",
   backgroundColor: "#24293F",
   borderRadius: "24px",
-}));
-
-export const StyledPopup = styled(Popup)(({ theme }) => ({
-  "&-overlay": {
-    background: "rgba(0, 0, 0, 0.85)",
-  },
-  "@media (max-width: 768px)": {
-    "&-overlay": {
-      overflow: "auto",
-    },
-  },
 }));

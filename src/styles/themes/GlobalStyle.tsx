@@ -1,6 +1,6 @@
 import { GlobalStyles } from "@mui/material";
 
-const GlobalStyle: React.FC = () => {
+const GlobalStyle = () => {
   return (
     <GlobalStyles
       styles={{
@@ -14,6 +14,9 @@ const GlobalStyle: React.FC = () => {
           background: "#060B28",
           color: "#ffffff",
           fontFamily: "'Montserrat', sans-serif",
+          height: "100%",
+          minHeight: "100vh",
+          width: "100%",
           "&::-webkit-scrollbar": {
             width: "1rem",
           },
