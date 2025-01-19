@@ -37,14 +37,15 @@ export function Body() {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchByUser, setSearchByUser] = useState<string>('');
   const [typeSelected, setTypeSelected] = useState<string>('');
-  const [allTypes, setAllTypes] = useState([]);
+  const [allTypes, setAllTypes] = useState<PokemonCard[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        setAllTypes(await fetchTypes());
+        const {data} = await fetchTypes()
+        setAllTypes(data);
         getCardsByPage(currentPage);
       } catch (error) {
         console.log(error);
@@ -110,8 +111,8 @@ export function Body() {
     setLoading(true);
     if (value) {
       try {
-        const fetchedCards = await fetchCardByName(value);
-        setPokemons(fetchedCards);
+        const {data} = await fetchCardByName(value);
+        setPokemons(data);
       } catch (error) {
         console.error(error);
       } finally {

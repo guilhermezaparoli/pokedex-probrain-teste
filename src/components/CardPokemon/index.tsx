@@ -18,7 +18,7 @@ import { useState } from 'react';
 
 interface CardPokemonProps {
   pokemonData: PokemonCard;
-  modal: boolean
+  modal?: boolean
 }
 
 export function CardPokemon({ pokemonData, modal }: CardPokemonProps) {

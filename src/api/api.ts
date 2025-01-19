@@ -78,7 +78,7 @@ export async function fetchCardById(cardId: string): Promise<PokemonAPIResponse>
 export async function fetchTypes(): Promise<PokemonAPIResponse> {
   try {
     const response = await api.get(`/types`);
-    const {data} = response.data
+    const {data} = response
     return data
   } catch (error) {
     console.error("Erro ao buscar carta por ID:", error);
