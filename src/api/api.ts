@@ -1,14 +1,13 @@
 import axios from "axios";
-import { PokemonAPIResponse, PokemonCard } from "../@types/PokemonCard";
-
-
+import { PokemonAPIResponse } from "../@types/PokemonCard";
+import { PokemonTypes } from "../@types/PokemonTypes";
 
 
 
 export const api = axios.create({
-  baseURL: "https://api.pokemontcg.io/v2",
+  baseURL: process.env.API_BASE_URL,
   headers: {
-    Authorization: `59e38f0b-a63f-4afd-a18e-e05829eaffab`, 
+    Authorization: process.env.API_KEY, 
   },
 });
 
@@ -29,7 +28,7 @@ export async function getAllPokemonCards(page: number, pageSize: number = 9): Pr
 }
 
 export async function fetchCardsByType(
-  typeName: string,
+  typeName: PokemonTypes,
   page: number,
   pageSize = 9
 ): Promise<PokemonAPIResponse> {

@@ -13,7 +13,7 @@ import { ReactComponent as IconTypeSteel } from '../../assets/pokemonTypes/steel
 import { ReactComponent as IconTypeWater } from '../../assets/pokemonTypes/water.svg';
 import { PokemonTypes } from '../../@types/PokemonTypes';
 export interface CardTypeProps {
-  value: PokemonTypes;
+  value: keyof PokemonTypes;
   isSelected: boolean;
   onClick?: () => void;
   style?: CSSProperties;

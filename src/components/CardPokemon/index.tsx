@@ -68,7 +68,7 @@ export function CardPokemon({ pokemonData, modal }: CardPokemonProps) {
         </motion.div>
       
       <Card color={pokemonTypes[0]}>
-        <PokemonName>{pokemonData.name}</PokemonName>
+        <PokemonName title={pokemonData.name}>{pokemonData.name}</PokemonName>
         <Type>
           {pokemonTypes.length > 0 && pokemonTypes.map((item) => (
             <CardType

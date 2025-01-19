@@ -31,12 +31,13 @@ import IconSearch from '../../../assets/icon-search.svg';
 import PokeballIcon from '../../../assets/pokeball-icon-colored.svg';
 import { useDebounce } from '../../../utils/debounce';
 import { PokemonCard } from '../../../@types/PokemonCard';
+import { PokemonTypes } from '../../../@types/PokemonTypes';
 
 export function Body() {
   const [pokemons, setPokemons] = useState<PokemonCard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchByUser, setSearchByUser] = useState<string>('');
-  const [typeSelected, setTypeSelected] = useState<string>('');
+  const [typeSelected, setTypeSelected] = useState<PokemonTypes>('');
   const [allTypes, setAllTypes] = useState<PokemonCard[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +45,7 @@ export function Body() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const {data} = await fetchTypes()
+        const { data } = await fetchTypes();
         setAllTypes(data);
         getCardsByPage(currentPage);
       } catch (error) {
@@ -55,7 +56,7 @@ export function Body() {
     fetchInitialData();
   }, []);
 
-  async function onSelectType(type: string) {
+  async function onSelectType(type: PokemonTypes) {
     if (typeSelected !== type) {
       setTypeSelected(type);
       setLoading(true);
@@ -73,7 +74,7 @@ export function Body() {
     }
   }
 
-  async function getCardsByType(type: string, currentPage: number) {
+  async function getCardsByType(type: PokemonTypes, currentPage: number) {
     try {
       const { data, pageSize, totalCount, page } = await fetchCardsByType(
         type,
@@ -111,7 +112,7 @@ export function Body() {
     setLoading(true);
     if (value) {
       try {
-        const {data} = await fetchCardByName(value);
+        const { data } = await fetchCardByName(value);
         setPokemons(data);
       } catch (error) {
         console.error(error);
