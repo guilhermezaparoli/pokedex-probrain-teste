@@ -48,7 +48,7 @@ export const Card = styled("div")(({ theme, color }) => ({
     content: "''",
     width: "12.5rem",
     height: "12.5rem",
-    backgroundColor: typeof color == "string" ? theme.palette[color].main : "transparent",
+    backgroundColor: typeof color == "string" ? theme.palette[color]?.main : "transparent",
     filter: "blur(128px)",
     position: "absolute",
     top: 0,
@@ -120,7 +120,7 @@ export const MoreDetails = styled("button")(({ theme, color }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: typeof color == "string" ? theme.palette[color].main : "transparent",
+  backgroundColor: typeof color == "string" ? theme.palette[color]?.main : "transparent",
   cursor: "pointer",
   marginTop: "40px",
   "> p": {

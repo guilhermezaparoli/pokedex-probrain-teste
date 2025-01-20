@@ -123,6 +123,7 @@ export function Body() {
     const value = e.target.value as string;
     setFilterValue(value);
     fetchCardsData({ page: 1, filterValue: value, typeName: typeSelected });
+    setSearchByUser("")
   }
 
   useEffect(() => {
@@ -143,7 +144,7 @@ export function Body() {
         <InputSearchContainer>
           <InputSearch
             type="text"
-            placeholder="Search your pokemon"
+            placeholder="Search your card"
             onChange={handleSearchChange}
             value={searchByUser}
             aria-label="Search Pokémon"
@@ -213,7 +214,7 @@ export function Body() {
           <StyledPagination
             count={totalPages}
             page={currentPage}
-            boundaryCount={0}
+            boundaryCount={1}
             showFirstButton
             showLastButton
             onChange={(e, value) => {
