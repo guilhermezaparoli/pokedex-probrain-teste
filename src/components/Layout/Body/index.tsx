@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import GifPikachuCrying from '../../../assets/gif/pikachu-crying.gif';
 import { CardPokemon } from '../../CardPokemon';
 import {
-  ButtonSearch,
   ContainerCards,
   ContainerDivider,
   ContainerGif,
+  ContainerOrderBy,
   DividerLeft,
   DividerRight,
   InputSearch,
   InputSearchContainer,
   PokemonNotFound,
   SearchContainer,
+  SelectFilter,
   StyledContainerBody,
   StyledLoader,
   StyledPagination,
@@ -25,19 +26,18 @@ import {
   fetchPokemonCards,
 } from '../../../api/api';
 import { CardType } from '../../CardType';
-import IconSearch from '../../../assets/icon-search.svg';
 import PokeballIcon from '../../../assets/pokeball-icon-colored.svg';
 import { useDebounce } from '../../../utils/debounce';
 import { PokemonCard } from '../../../@types/PokemonCard';
 import { PokemonTypes } from '../../../@types/PokemonTypes';
-import { FormControl, MenuItem, Select } from '@mui/material';
+import { MenuItem, SelectChangeEvent } from '@mui/material';
 
 export function Body() {
   const [pokemons, setPokemons] = useState<PokemonCard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchByUser, setSearchByUser] = useState<string>('');
-  const [typeSelected, setTypeSelected] = useState<PokemonTypes>('');
-  const [allTypes, setAllTypes] = useState<PokemonCard[]>([]);
+  const [typeSelected, setTypeSelected] = useState<PokemonTypes| string>('');
+  const [allTypes, setAllTypes] = useState<PokemonTypes[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterValue, setFilterValue] = useState('');
@@ -119,7 +119,7 @@ export function Body() {
     debouncedSearch(value);
   }
 
-  function handleFilterChange(e: React.ChangeEvent<{ value: unknown }>) {
+  function handleFilterChange(e: SelectChangeEvent<unknown>)  {
     const value = e.target.value as string;
     setFilterValue(value);
     fetchCardsData({ page: 1, filterValue: value, typeName: typeSelected });
@@ -143,37 +143,39 @@ export function Body() {
         <InputSearchContainer>
           <InputSearch
             type="text"
-            placeholder="Busque seu pokemon"
+            placeholder="Search your pokemon"
             onChange={handleSearchChange}
             value={searchByUser}
             aria-label="Search Pokémon"
           />
-          <ButtonSearch type="submit">
-            <img src={IconSearch} alt="Search icon" />
-          </ButtonSearch>
-          <FormControl
-            fullWidth
-            sx={{ backgroundColor: '#e0e0e0', borderRadius: '4px', minWidth: 250 }}
-          >
-            <Select
+          <ContainerOrderBy>
+
+         <p>Order by:
+
+         </p>
+  
+         
+            <SelectFilter
               value={filterValue}
               onChange={handleFilterChange}
               displayEmpty
-              sx={{ padding: '0 8px' }}
+              sx={{ padding: '0 8px'}}
             >
-              <MenuItem disabled value="">
-                <em>Escolha uma opção</em>
+              <MenuItem  disabled value="">
+                <em>Choose a filter</em>
               </MenuItem>
               {filterOptions.map(({ value, label }) => (
-                <MenuItem key={value} value={value}>
+                <MenuItem  key={value} value={value}>
                   {label}
                 </MenuItem>
               ))}
-            </Select>
-          </FormControl>
+            </SelectFilter>
+            </ContainerOrderBy>
+         
         </InputSearchContainer>
         <TypeSearch>
-          <p>Filtro por tipo</p>
+          <p>
+          Filter by type</p>
           <Types>
             {allTypes?.length > 0 ? (
               allTypes.map((type, index) => (
@@ -209,14 +211,15 @@ export function Body() {
             ))}
           </ContainerCards>
           <StyledPagination
-            size="large"
             count={totalPages}
             page={currentPage}
+            boundaryCount={0}
             showFirstButton
             showLastButton
             onChange={(e, value) => {
               fetchCardsData({ page: value, filterValue, typeName: typeSelected });
               scrollTo({ top: 500, behavior: 'smooth' });
+              console.log(e);
             }}
           />
         </>

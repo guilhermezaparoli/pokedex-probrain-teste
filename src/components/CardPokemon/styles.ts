@@ -1,6 +1,5 @@
 import { styled, keyframes } from "@mui/material/styles";
 import Popup from "reactjs-popup";
-import { PokemonTypes } from "../../@types/PokemonTypes";
 
 const fadeDown = keyframes`
   from {
@@ -20,7 +19,7 @@ interface StyledMainContainerProps {
 
 export const StyledMainContainer = styled("div", {
   shouldForwardProp: (prop) => prop !== "modal",
-})<StyledMainContainerProps>(({ theme }) => ({
+})<StyledMainContainerProps>(() => ({
   width: "24rem",
   maxHeight: "23.5rem",
   animation: `${fadeDown} 0.8s`,
@@ -32,7 +31,8 @@ export const StyledMainContainer = styled("div", {
 
 }));
 
-export const Card = styled("div")<PokemonTypes>(({ theme, color }) => ({
+
+export const Card = styled("div")(({ theme, color }) => ({
   border: `1px solid #24293F`,
   paddingTop: "7rem",
   display: "flex",
@@ -46,10 +46,9 @@ export const Card = styled("div")<PokemonTypes>(({ theme, color }) => ({
   zIndex: -1,
   "&::after": {
     content: "''",
-    display: "block",
     width: "12.5rem",
     height: "12.5rem",
-    backgroundColor: theme.palette[color]?.main,
+    backgroundColor: typeof color == "string" ? theme.palette[color].main : "transparent",
     filter: "blur(128px)",
     position: "absolute",
     top: 0,
@@ -60,7 +59,7 @@ export const Card = styled("div")<PokemonTypes>(({ theme, color }) => ({
   },
 }));
 
-export const PokemonImage = styled("img")(({ theme }) => ({
+export const PokemonImage = styled("img")(() => ({
   maxWidth: "16rem",
   maxHeight: "16rem",
   position: "absolute",
@@ -114,16 +113,14 @@ export const IconTextContainer = styled("div")(({ theme }) => ({
 }));
 
 
-export const MoreDetails = styled("button", {
-  shouldForwardProp: (prop) => prop !== "color",
-})<PokemonTypes>(({ theme, color }) => ({
+export const MoreDetails = styled("button")(({ theme, color }) => ({
   width: "100%",
   borderRadius: "0 0 24px 24px",
   padding: "12px 8px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: theme.palette[color]?.main,
+  backgroundColor: typeof color == "string" ? theme.palette[color].main : "transparent",
   cursor: "pointer",
   marginTop: "40px",
   "> p": {
@@ -138,7 +135,7 @@ export const MoreDetails = styled("button", {
   },
 }));
 
-export const Dialog = styled("div")(({ theme }) => ({
+export const Dialog = styled("div")(() => ({
   width: "100%",
   margin: "14rem 0 7rem",
   backgroundColor: "#24293F",

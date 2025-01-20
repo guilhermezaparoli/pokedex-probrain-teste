@@ -1,7 +1,7 @@
-import { Input, Pagination } from "@mui/material";
+import { Input, Pagination, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export const StyledContainerBody = styled("main")(({ theme }) => ({
+export const StyledContainerBody = styled("main")(() => ({
   paddingBottom: "8rem",
   ".loader": {
     width: "48px",
@@ -64,7 +64,7 @@ export const Types = styled("div")({
   },
 });
 
-export const InputSearchContainer = styled("div")(({ theme }) => ({
+export const InputSearchContainer = styled("div")(() => ({
   maxWidth: "350px",
   width: "100%",
   position: "relative",
@@ -100,8 +100,30 @@ export const InputSearch = styled(Input)(({ theme }) => ({
     border: `2px solid #2F5AFF`,
   },
 }));
+export const SelectFilter = styled(Select)(({ theme }) => ({
+  width: "300px",
+  height: "56px",
+  padding: "1rem",
+  borderRadius: "8px",
+  border: `2px solid #4e6aff`,
+  outline: "none",
+  backgroundColor: "#4e6aff",
+  color: theme.palette.primary.main,
+  fontSize: "1rem",
+  "&::placeholder": {
+    fontSize: "1rem",
+    lineHeight: "1.5rem",
+    color: "rgba(255, 255, 255, 0.25)",
+  },
+  transition: "border 0.3s",
+  "&:focus": {
+    border: `2px solid #2F5AFF`,
+  },
+}));
 
-export const ButtonSearch = styled("button")(({ theme }) => ({
+
+
+export const ButtonSearch = styled("button")(() => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -204,7 +226,7 @@ export const TextPokemonNotFound = styled("p")(({ theme }) => ({
 
 
 
-export const StyledPagination = styled(Pagination)(({ theme }) => ({
+export const StyledPagination = styled(Pagination)(() => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -231,3 +253,15 @@ export const StyledPagination = styled(Pagination)(({ theme }) => ({
 }));
 
 
+export const ContainerOrderBy = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: "1rem",
+
+
+  "> p": {
+    marginBottom: "0.5rem"
+  }
+})

@@ -4,7 +4,7 @@ import { PokemonTypes } from "../../@types/PokemonTypes";
 
 interface StyledContainerProps {
   isSelected: boolean;
-  statusColor: keyof PokemonTypes
+  statusColor: keyof PokemonTypes 
 }
 export const StyledContainer = styled("button")<StyledContainerProps>(({ theme, isSelected, statusColor }) => ({
   backgroundColor: isSelected

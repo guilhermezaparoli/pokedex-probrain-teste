@@ -21,7 +21,7 @@ export async function fetchPokemonCards({
   page?: number;
   pageSize?: number;
   filterValue?: string;
-  typeName?: PokemonTypes;
+  typeName?: PokemonTypes | string;
   cardName?: string;
 }): Promise<PokemonAPIResponse> {
   try {
@@ -42,8 +42,11 @@ export async function fetchPokemonCards({
   }
 }
 
+interface FetchTypesProps {
+  data: PokemonTypes[]
+}
 
-export async function fetchTypes(): Promise<PokemonAPIResponse> {
+export async function fetchTypes(): Promise<FetchTypesProps> {
   try {
     const response = await api.get(`/types`);
     const {data} = response

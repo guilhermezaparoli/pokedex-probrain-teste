@@ -1,8 +1,7 @@
 import { createTheme, PaletteColor, PaletteColorOptions } from "@mui/material";
 
-// Estendendo as interfaces do Material-UI para incluir todas as cores personalizadas.
 declare module "@mui/material/styles" {
-  interface Palette {
+  export interface Palette {
     Fire: PaletteColor;
     Darkness: PaletteColor;
     Dragon: PaletteColor;
@@ -31,7 +30,6 @@ declare module "@mui/material/styles" {
   }
 }
 
-// Criando o tema MUI com as cores do antigo `defaultTheme`
 export const theme = createTheme({
   palette: {
     primary: {

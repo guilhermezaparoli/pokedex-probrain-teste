@@ -9,11 +9,11 @@ import {
   LinkDocumentation,
   StyledGlobalContainer,
   Waves,
-} from "./styles";
-import PokemonLogo from "../../../assets/logo-pokemon.svg";
-import ImgCharizar from "../../../assets/img-charizard-min.png";
-import ImgPokemonTrainer from "../../../assets/img- pokémon_Trainer.png";
-import ImgIvysaur from "../../../assets/img-ivysaur.png";
+} from './styles';
+import PokemonLogo from '../../../assets/logo-pokemon.svg';
+import ImgCharizar from '../../../assets/img-charizard-min.png';
+import ImgPokemonTrainer from '../../../assets/img- pokémon_Trainer.png';
+import ImgIvysaur from '../../../assets/img-ivysaur.png';
 
 export function Header() {
   return (
@@ -21,28 +21,25 @@ export function Header() {
       <ContainerHeader>
         <HeaderContent>
           <a href="/">
-          <img src={PokemonLogo} alt="Pokémon logo" />
+            <img src={PokemonLogo} alt="Pokémon logo" />
           </a>
-          
-            
-            <LinkDocumentation href="https://docs.pokemontcg.io/" target="_blank">
-            Documentação
-            </LinkDocumentation>
-          
+
+          <LinkDocumentation href="https://docs.pokemontcg.io/" target="_blank">
+            Documentation
+          </LinkDocumentation>
         </HeaderContent>
       </ContainerHeader>
 
       <ContainerHero>
         <Heroes>
           <div>
+            <ImgSmallHero src={ImgIvysaur} alt="imagem do pokémon Ivysaur" />
 
-          <ImgSmallHero src={ImgIvysaur} alt="imagem do pokémon Ivysaur" />
-
-          <ImgHero
-            style={{ transform: "none" }}
-            src={ImgPokemonTrainer}
-            alt="imagem do treinador do pokemon"
-          />
+            <ImgHero
+              style={{ transform: 'none' }}
+              src={ImgPokemonTrainer}
+              alt="imagem do treinador do pokemon"
+            />
           </div>
 
           <ImgBigHero src={ImgCharizar} alt="imagem do pokémon charizard" />

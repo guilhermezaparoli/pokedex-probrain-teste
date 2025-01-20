@@ -11,16 +11,17 @@ export const ContainerModalPokemon = styled('div')(({ theme }) => ({
   alignItems: 'center',
   position: 'relative',
 
-  '> svg': {
-    fill: theme.palette.primary.main,
-    height: 35,
+  '> button': {
+    color: theme.palette.primary.main,
     position: 'absolute',
     margin: 8,
-    top: 0,
-    right: 0,
+    top: 5,
+    right: 10,
     transition: 'transform 0.3s',
     cursor: 'pointer',
     zIndex: 999,
+    backgroundColor: "transparent",
+    fontSize: "1.5rem",
 
     '&:hover': {
       transform: 'scale(1.1)',
@@ -48,7 +49,7 @@ export const ContainerDivider = styled('div')(() => ({
 }));
 
 
-export const Divider = styled('div')(({ theme }) => ({
+export const Divider = styled('div')(() => ({
   width: 1,
   height: 124,
     backgroundColor: "rgba(255, 255, 255, 0.25)",

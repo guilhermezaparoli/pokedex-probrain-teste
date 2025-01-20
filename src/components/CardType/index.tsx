@@ -12,10 +12,9 @@ import Metal from "../../components/icons/Metal"
 import Water from "../../components/icons/Water"
 import Fighting from "../../components/icons/Fighting"
 import Grass from "../../components/icons/Grass"
-import { PokemonTypes } from '../../@types/PokemonTypes';
 
 export interface CardTypeProps {
-  value: keyof PokemonTypes;
+  value: any ;
   isSelected: boolean;
   onClick?: () => void;
   style?: CSSProperties;
