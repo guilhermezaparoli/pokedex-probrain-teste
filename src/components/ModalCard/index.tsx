@@ -10,10 +10,9 @@ import {
   TextStatus,
   TitleStatus,
 } from './styles';
-import  DividerPokeballIcon  from '../../assets/divider-pokeball.svg';
-import  CloseIcon  from '../../assets/close-icon.svg';
-import { PokemonCard } from '../../@types/PokemonCard';
 
+import { PokemonCard } from '../../@types/PokemonCard';
+import DividerPokeballIcon from '../../components/icons/DividerPokeball';
 interface ModalPokemonProps {
   pokemonData: PokemonCard;
   close: () => void;
@@ -23,11 +22,13 @@ export function ModalPokemon({ pokemonData, close }: ModalPokemonProps) {
   return (
     <>
       <ContainerModalPokemon>
-        <CloseIcon
+        <button
           onClick={() => {
             close();
           }}
-        />
+        >
+          X
+        </button>
         <CardPokemon pokemonData={pokemonData} modal />
         <ContainerDivider>
           <Divider />
@@ -52,8 +53,7 @@ export function ModalPokemon({ pokemonData, close }: ModalPokemonProps) {
                       <p>{index + 1}º</p>
                       <p>{attack.name}</p>
                     </StatusLinha>
-                    {attack.damage &&  <p>Damage: {attack.damage}</p>}
-                   
+                    {attack.damage && <p>Damage: {attack.damage}</p>}
                   </>
                 ))}
               </div>

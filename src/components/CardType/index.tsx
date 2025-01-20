@@ -1,17 +1,19 @@
 import { CSSProperties, FC } from 'react';
 import { StyledContainer } from './styles';
-// import { ReactComponent as IconTypeDark } from '../../assets/pokemonTypes/dark.svg';
-// import { ReactComponent as IconTypeDragon } from '../../assets/pokemonTypes/dragon.svg';
-// import { ReactComponent as IconTypeElectric } from '../../assets/pokemonTypes/electric.svg';
-// import { ReactComponent as IconTypeFairy } from '../../assets/pokemonTypes/fairy.svg';
-// import { ReactComponent as IconTypeFighting } from '../../assets/pokemonTypes/fighting.svg';
-// import { ReactComponent as IconTypeFire } from '../../assets/pokemonTypes/fire.svg';
-// import { ReactComponent as IconTypeGrass } from '../../assets/pokemonTypes/grass.svg';
-// import { ReactComponent as IconTypeNormal } from '../../assets/pokemonTypes/normal.svg';
-// import { ReactComponent as IconTypePsychic } from '../../assets/pokemonTypes/psychic.svg';
-// import { ReactComponent as IconTypeSteel } from '../../assets/pokemonTypes/steel.svg';
-// import { ReactComponent as IconTypeWater } from '../../assets/pokemonTypes/water.svg';
+
+import Darkness from "../../components/icons/Darkness"
+import Dragon from "../../components/icons/Dragon"
+import Electric from "../../components/icons/Electric"
+import Fairy from "../../components/icons/Fairy"
+import Fire from "../../components/icons/Fire"
+import Colorless from "../../components/icons/Colorless"
+import Psychic from "../../components/icons/Psychic"
+import Metal from "../../components/icons/Metal"
+import Water from "../../components/icons/Water"
+import Fighting from "../../components/icons/Fighting"
+import Grass from "../../components/icons/Grass"
 import { PokemonTypes } from '../../@types/PokemonTypes';
+
 export interface CardTypeProps {
   value: keyof PokemonTypes;
   isSelected: boolean;
@@ -27,42 +29,42 @@ export function CardType({
 }: CardTypeProps) {
   let TypeSvgComponent: FC<React.SVGProps<SVGSVGElement>> | undefined;
 
-  // switch (value) {
-  //   case 'Darkness':
-  //     TypeSvgComponent = IconTypeDark;
-  //     break;
-  //   case 'Dragon':
-  //     TypeSvgComponent = IconTypeDragon;
-  //     break;
-  //   case 'Lightning':
-  //     TypeSvgComponent = IconTypeElectric;
-  //     break;
-  //   case 'Fairy':
-  //     TypeSvgComponent = IconTypeFairy;
-  //     break;
-  //   case 'Fighting':
-  //     TypeSvgComponent = IconTypeFighting;
-  //     break;
-  //   case 'Fire':
-  //     TypeSvgComponent = IconTypeFire;
-  //     break;
-  //   case 'Grass':
-  //     TypeSvgComponent = IconTypeGrass;
-  //     break;
+  switch (value) {
+    case 'Darkness':
+      TypeSvgComponent = Darkness;
+      break;
+    case 'Dragon':
+      TypeSvgComponent = Dragon;
+      break;
+    case 'Lightning':
+      TypeSvgComponent = Electric;
+      break;
+    case 'Fairy':
+      TypeSvgComponent = Fairy;
+      break;
+    case 'Fighting':
+      TypeSvgComponent = Fighting;
+      break;
+    case 'Fire':
+      TypeSvgComponent = Fire;
+      break;
+    case 'Grass':
+      TypeSvgComponent = Grass;
+      break;
 
-  //   case 'Colorless':
-  //     TypeSvgComponent = IconTypeNormal;
-  //     break;
-  //   case 'Psychic':
-  //     TypeSvgComponent = IconTypePsychic;
-  //     break;
-  //   case 'Metal':
-  //     TypeSvgComponent = IconTypeSteel;
-  //     break;
-  //   case 'Water':
-  //     TypeSvgComponent = IconTypeWater;
-  //     break;
-  // }
+    case 'Colorless':
+      TypeSvgComponent = Colorless;
+      break;
+    case 'Psychic':
+      TypeSvgComponent = Psychic;
+      break;
+    case 'Metal':
+      TypeSvgComponent = Metal;
+      break;
+    case 'Water':
+      TypeSvgComponent = Water;
+      break;
+  }
 
   return (
     <StyledContainer
@@ -71,8 +73,8 @@ export function CardType({
       style={style}
       isSelected={isSelected}
     >
-      {/* {TypeSvgComponent && <TypeSvgComponent />} */}
-
+      {TypeSvgComponent && <TypeSvgComponent />}
+{/* <Darkness/> */}
       <p>{value}</p>
     </StyledContainer>
   );

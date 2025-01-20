@@ -21,10 +21,8 @@ import {
   Types,
 } from './styles';
 import {
-  getAllPokemonCards,
-  fetchCardByName,
-  fetchCardsByType,
   fetchTypes,
+  fetchPokemonCards,
 } from '../../../api/api';
 import { CardType } from '../../CardType';
 import IconSearch from '../../../assets/icon-search.svg';
@@ -43,183 +41,172 @@ export function Body() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterValue, setFilterValue] = useState('');
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const { data } = await fetchTypes();
-        setAllTypes(data);
-        getCardsByPage(currentPage);
-      } catch (error) {
-        console.log(error);
-      }
+
+  const filterOptions = [
+    { value: 'number', label: 'Number (Ascending)' },
+    { value: '-number', label: 'Number (Descending)' },
+    { value: 'name', label: 'Name (A-Z)' },
+    { value: '-name', label: 'Name (Z-A)' },
+    { value: 'releaseDate', label: 'Release Date (Most Recent)' },
+    { value: '-releaseDate', label: 'Release Date (Oldest)' },
+  ];
+
+  async function fetchTypesData() {
+    try {
+      const { data } = await fetchTypes();
+      setAllTypes(data);
+    } catch (error) {
+      console.error('Error fetching types:', error);
+    }
+  }
+
+  async function fetchCardsData({
+    page = 1,
+    filterValue = '',
+    typeName = '' ,
+    cardName = '',
+  }: {
+    page?: number;
+    filterValue?: string;
+    typeName?: PokemonTypes | string;
+    cardName?: string;
+  }) {
+    setLoading(true);
+    try {
+      const { data, pageSize, totalCount, page: fetchedPage } = await fetchPokemonCards({
+        page,
+        filterValue,
+        typeName,
+        cardName,
+      });
+      setPokemons(data);
+      setTotalPages(Math.ceil(totalCount / pageSize));
+      setCurrentPage(fetchedPage);
+    } catch (error) {
+      console.error('Error fetching cards:', error);
+    } finally {
       setLoading(false);
-    };
-    fetchInitialData();
-  }, []);
+    }
+  }
 
   async function onSelectType(type: PokemonTypes) {
-    if (typeSelected !== type) {
-      setTypeSelected(type);
-      setLoading(true);
-
-      try {
-        await getCardsByType(type, 1);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
+    if (typeSelected === type) {
       setTypeSelected('');
-      getCardsByPage(currentPage);
+      await fetchCardsData({ page: 1, filterValue });
+      return;
     }
+
+    setTypeSelected(type);
+    setSearchByUser("")
+    await fetchCardsData({ page: 1, typeName: type, filterValue });
   }
 
-  async function getCardsByType(type: PokemonTypes, currentPage: number) {
-    try {
-      const { data, pageSize, totalCount, page } = await fetchCardsByType(
-        type,
-        currentPage
-      );
-      const totalPages = Math.ceil(totalCount / pageSize);
-      setPokemons(data);
-      setTotalPages(totalPages);
-      setCurrentPage(page);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function getCardsByPage(currentPage: number) {
-    setLoading(true);
-    try {
-      const { data, pageSize, totalCount, page } = await getAllPokemonCards(
-        currentPage,
-        filterValue
-      );
-      const totalPages = Math.ceil(totalCount / pageSize);
-      setPokemons(data);
-      setTotalPages(totalPages);
-      setCurrentPage(page);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleSearch(value: string) {
-    setLoading(true);
+  const debouncedSearch = useDebounce(async (value: string) => {
     if (value) {
-      try {
-        const { data } = await fetchCardByName(value);
-        setPokemons(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      await fetchCardsData({ cardName: value });
     } else {
-      getCardsByPage(currentPage);
+      await fetchCardsData({ page: currentPage, filterValue });
     }
-  }
+  }, 500);
 
-  const debouncedSearch = useDebounce(handleSearch, 500);
-
-  function onSearchByUser(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
+
+    if(value) {
+      setTypeSelected('')
+    }
     setSearchByUser(value);
     debouncedSearch(value);
   }
 
-  function onSelectFilter(e) {
-    setFilterValue(e.target.value);
-    getCardsByPage(currentPage);
+  function handleFilterChange(e: React.ChangeEvent<{ value: unknown }>) {
+    const value = e.target.value as string;
+    setFilterValue(value);
+    fetchCardsData({ page: 1, filterValue: value, typeName: typeSelected });
   }
+
+  useEffect(() => {
+    async function initializeData() {
+      try {
+        await fetchTypesData();
+        await fetchCardsData({ page: 1 });
+      } catch (error) {
+        console.error('Initialization error:', error);
+      }
+    }
+    initializeData();
+  }, []);
 
   return (
     <StyledContainerBody>
       <SearchContainer>
         <InputSearchContainer>
-          <form action="">
-            <InputSearch
-              type="text"
-              placeholder="Busque seu pokemon"
-              onChange={(e) => onSearchByUser(e)}
-              value={searchByUser}
-            />
-            <ButtonSearch type="submit">
-              <img src={IconSearch} alt="icone de lupa" />
-            </ButtonSearch>
-          </form>
+          <InputSearch
+            type="text"
+            placeholder="Busque seu pokemon"
+            onChange={handleSearchChange}
+            value={searchByUser}
+            aria-label="Search Pokémon"
+          />
+          <ButtonSearch type="submit">
+            <img src={IconSearch} alt="Search icon" />
+          </ButtonSearch>
           <FormControl
             fullWidth
-            sx={{
-              backgroundColor: '#e0e0e0',
-              borderRadius: '4px',
-              minWidth: 250,
-            }}
+            sx={{ backgroundColor: '#e0e0e0', borderRadius: '4px', minWidth: 250 }}
           >
             <Select
               value={filterValue}
-              onChange={onSelectFilter}
+              onChange={handleFilterChange}
               displayEmpty
-              sx={{
-                padding: '0 8px',
-              }}
+              sx={{ padding: '0 8px' }}
             >
               <MenuItem disabled value="">
                 <em>Escolha uma opção</em>
               </MenuItem>
-              <MenuItem value="number">Número (Ascendente)</MenuItem>
-              <MenuItem value="-number">Número (Descendente)</MenuItem>
-              <MenuItem value="name">Nome (A-Z)</MenuItem>
-              <MenuItem value="-name">Nome (Z-A)</MenuItem>
-              <MenuItem value="releaseDate">
-                Data de Lançamento (Mais recente)
-              </MenuItem>
-              <MenuItem value="-releaseDate">
-                Data de Lançamento (Mais antiga)
-              </MenuItem>
+              {filterOptions.map(({ value, label }) => (
+                <MenuItem key={value} value={value}>
+                  {label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </InputSearchContainer>
         <TypeSearch>
           <p>Filtro por tipo</p>
           <Types>
-            {allTypes?.length > 0 &&
-              allTypes.map((type, index) => {
-                return (
-                  <CardType
-                    key={index}
-                    value={type}
-                    onClick={() => onSelectType(type)}
-                    isSelected={type === typeSelected}
-                  />
-                );
-              })}
+            {allTypes?.length > 0 ? (
+              allTypes.map((type, index) => (
+                <CardType
+                  key={index}
+                  value={type}
+                  onClick={() => onSelectType(type)}
+                  isSelected={type === typeSelected}
+                />
+              ))
+            ) : (
+              <p>Loading types...</p>
+            )}
           </Types>
         </TypeSearch>
       </SearchContainer>
 
       <ContainerDivider>
         <DividerLeft />
-        <StyledPokeballIcon src={PokeballIcon} alt="" />
+        <StyledPokeballIcon src={PokeballIcon} alt="Pokeball icon" />
         <DividerRight />
       </ContainerDivider>
+
       {loading ? (
-        <StyledLoader style={{ display: 'flex', justifyContent: 'center' }}>
-          <span className="loader" />{' '}
+        <StyledLoader>
+          <span className="loader" />
         </StyledLoader>
       ) : pokemons?.length > 0 ? (
         <>
           <ContainerCards>
-            {pokemons?.length > 0 &&
-              pokemons.map((pokemon) => (
-                <CardPokemon key={pokemon.id} pokemonData={pokemon} />
-              ))}
+            {pokemons.map((pokemon) => (
+              <CardPokemon key={pokemon.id} pokemonData={pokemon} />
+            ))}
           </ContainerCards>
           <StyledPagination
             size="large"
@@ -228,13 +215,7 @@ export function Body() {
             showFirstButton
             showLastButton
             onChange={(e, value) => {
-              setLoading(true);
-
-              if (typeSelected) {
-                getCardsByType(typeSelected, value);
-              } else {
-                getCardsByPage(value);
-              }
+              fetchCardsData({ page: value, filterValue, typeName: typeSelected });
               scrollTo({ top: 500, behavior: 'smooth' });
             }}
           />
@@ -242,7 +223,7 @@ export function Body() {
       ) : (
         <PokemonNotFound>
           <ContainerGif>
-            <img src={GifPikachuCrying} alt="" />
+            <img src={GifPikachuCrying} alt="Crying Pikachu" loading="lazy" />
           </ContainerGif>
           <TextPokemonNotFound>
             Desculpe, pokemon não encontrado!

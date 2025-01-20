@@ -4,74 +4,44 @@ import { PokemonTypes } from "../@types/PokemonTypes";
 
 
 export const api = axios.create({
-  baseURL: "https://api.pokemontcg.io/v2",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
-    Authorization: "59e38f0b-a63f-4afd-a18e-e05829eaffab", 
+    Authorization:import.meta.env.VITE_API_KEY, 
   },
 });
-console.log(process.env.REACT_APP_API_KEY);
-export async function getAllPokemonCards(page: number, filterValue): Promise<PokemonAPIResponse> {
+console.log(import.meta.env.VITE_API_BASE_URL);
+
+export async function fetchPokemonCards({
+  page = 1,
+  pageSize = 9,
+  filterValue = '',
+  typeName = '',
+  cardName = '',
+}: {
+  page?: number;
+  pageSize?: number;
+  filterValue?: string;
+  typeName?: PokemonTypes;
+  cardName?: string;
+}): Promise<PokemonAPIResponse> {
   try {
-    const response = await api.get(`/cards?pageSize=9`, {
-      params: { page, orderBy: filterValue },
-    });
+    const params: Record<string, string | number> = {
+      page,
+      pageSize,
+      ...(filterValue && { orderBy: filterValue }),
+      ...(typeName && { q: `types:${typeName}` }),
+      ...(cardName && { q: `name:${cardName}` }),
+    };
 
-    const  {data}  = response;
-    
-  
-    return data
-  } catch (error) {
-    console.error("Erro ao buscar cartas:", error);
-    throw error;
-  }
-}
-
-export async function fetchCardsByType(
-  typeName: PokemonTypes,
-  page: number,
-  pageSize = 9
-): Promise<PokemonAPIResponse> {
-  try {
-    const response = await api.get(`/cards`, {
-      params: {
-        page,
-        pageSize,
-        q: `types:${typeName}`,
-      },
-    });
-
+    const response = await api.get(`/cards`, { params });
     const { data } = response;
     return data;
   } catch (error) {
-    console.error("Error fetching cards by type:", error);
+    console.error("Erro ao buscar cartas:", error);
     throw new Error("Failed to fetch cards. Please try again later.");
   }
 }
 
-
-export async function fetchCardByName(cardName: string): Promise<PokemonAPIResponse> {
-  try {
-    const response = await api.get(`/cards`, {
-      params: { q: `name:${cardName}` },
-    });
-
-    const { data } = response.data;
-    return data;
-  } catch (error) {
-    console.error("Erro ao buscar carta por nome:", error);
-    throw error;
-  }
-}
-
-export async function fetchCardById(cardId: string): Promise<PokemonAPIResponse> {
-  try {
-    const {data } = await api.get(`/cards/${cardId}`);
-    return data;
-  } catch (error) {
-    console.error("Erro ao buscar carta por ID:", error);
-    throw error;
-  }
-}
 
 export async function fetchTypes(): Promise<PokemonAPIResponse> {
   try {
@@ -83,5 +53,3 @@ export async function fetchTypes(): Promise<PokemonAPIResponse> {
     throw error;
   }
 }
-
-
