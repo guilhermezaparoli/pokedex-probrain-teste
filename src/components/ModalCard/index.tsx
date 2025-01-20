@@ -10,8 +10,8 @@ import {
   TextStatus,
   TitleStatus,
 } from './styles';
-import { ReactComponent as DividerPokeballIcon } from '../../assets/divider-pokeball.svg';
-import { ReactComponent as CloseIcon } from '../../assets/close-icon.svg';
+import  DividerPokeballIcon  from '../../assets/divider-pokeball.svg';
+import  CloseIcon  from '../../assets/close-icon.svg';
 import { PokemonCard } from '../../@types/PokemonCard';
 
 interface ModalPokemonProps {

@@ -32,6 +32,7 @@ import PokeballIcon from '../../../assets/pokeball-icon-colored.svg';
 import { useDebounce } from '../../../utils/debounce';
 import { PokemonCard } from '../../../@types/PokemonCard';
 import { PokemonTypes } from '../../../@types/PokemonTypes';
+import { FormControl, MenuItem, Select } from '@mui/material';
 
 export function Body() {
   const [pokemons, setPokemons] = useState<PokemonCard[]>([]);
@@ -41,7 +42,7 @@ export function Body() {
   const [allTypes, setAllTypes] = useState<PokemonCard[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [filterValue, setFilterValue] = useState('');
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -95,7 +96,8 @@ export function Body() {
     setLoading(true);
     try {
       const { data, pageSize, totalCount, page } = await getAllPokemonCards(
-        currentPage
+        currentPage,
+        filterValue
       );
       const totalPages = Math.ceil(totalCount / pageSize);
       setPokemons(data);
@@ -132,6 +134,11 @@ export function Body() {
     debouncedSearch(value);
   }
 
+  function onSelectFilter(e) {
+    setFilterValue(e.target.value);
+    getCardsByPage(currentPage);
+  }
+
   return (
     <StyledContainerBody>
       <SearchContainer>
@@ -147,20 +154,52 @@ export function Body() {
               <img src={IconSearch} alt="icone de lupa" />
             </ButtonSearch>
           </form>
+          <FormControl
+            fullWidth
+            sx={{
+              backgroundColor: '#e0e0e0',
+              borderRadius: '4px',
+              minWidth: 250,
+            }}
+          >
+            <Select
+              value={filterValue}
+              onChange={onSelectFilter}
+              displayEmpty
+              sx={{
+                padding: '0 8px',
+              }}
+            >
+              <MenuItem disabled value="">
+                <em>Escolha uma opção</em>
+              </MenuItem>
+              <MenuItem value="number">Número (Ascendente)</MenuItem>
+              <MenuItem value="-number">Número (Descendente)</MenuItem>
+              <MenuItem value="name">Nome (A-Z)</MenuItem>
+              <MenuItem value="-name">Nome (Z-A)</MenuItem>
+              <MenuItem value="releaseDate">
+                Data de Lançamento (Mais recente)
+              </MenuItem>
+              <MenuItem value="-releaseDate">
+                Data de Lançamento (Mais antiga)
+              </MenuItem>
+            </Select>
+          </FormControl>
         </InputSearchContainer>
         <TypeSearch>
           <p>Filtro por tipo</p>
           <Types>
-            {allTypes.map((type, index) => {
-              return (
-                <CardType
-                  key={index}
-                  value={type}
-                  onClick={() => onSelectType(type)}
-                  isSelected={type === typeSelected}
-                />
-              );
-            })}
+            {allTypes?.length > 0 &&
+              allTypes.map((type, index) => {
+                return (
+                  <CardType
+                    key={index}
+                    value={type}
+                    onClick={() => onSelectType(type)}
+                    isSelected={type === typeSelected}
+                  />
+                );
+              })}
           </Types>
         </TypeSearch>
       </SearchContainer>
@@ -174,10 +213,10 @@ export function Body() {
         <StyledLoader style={{ display: 'flex', justifyContent: 'center' }}>
           <span className="loader" />{' '}
         </StyledLoader>
-      ) : pokemons.length > 0 ? (
+      ) : pokemons?.length > 0 ? (
         <>
           <ContainerCards>
-            {pokemons.length > 0 &&
+            {pokemons?.length > 0 &&
               pokemons.map((pokemon) => (
                 <CardPokemon key={pokemon.id} pokemonData={pokemon} />
               ))}

@@ -3,18 +3,17 @@ import { PokemonAPIResponse } from "../@types/PokemonCard";
 import { PokemonTypes } from "../@types/PokemonTypes";
 
 
-
 export const api = axios.create({
-  baseURL: process.env.API_BASE_URL,
+  baseURL: "https://api.pokemontcg.io/v2",
   headers: {
-    Authorization: process.env.API_KEY, 
+    Authorization: "59e38f0b-a63f-4afd-a18e-e05829eaffab", 
   },
 });
-
-export async function getAllPokemonCards(page: number, pageSize: number = 9): Promise<PokemonAPIResponse> {
+console.log(process.env.REACT_APP_API_KEY);
+export async function getAllPokemonCards(page: number, filterValue): Promise<PokemonAPIResponse> {
   try {
-    const response = await api.get(`/cards?pageSize=10`, {
-      params: { page, pageSize },
+    const response = await api.get(`/cards?pageSize=9`, {
+      params: { page, orderBy: filterValue },
     });
 
     const  {data}  = response;

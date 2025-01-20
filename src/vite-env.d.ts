@@ -1,2 +1,6 @@
-/// <reference types="vite/client" />
-/// <reference types="vite-plugin-svgr/client" />
+export default defineConfig({
+  plugins: [
+    react(),
+    svgr(),
+  ],
+});
