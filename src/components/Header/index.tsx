@@ -10,10 +10,10 @@ import {
   StyledGlobalContainer,
   Waves,
 } from './styles';
-import PokemonLogo from '../../../assets/logo-pokemon.svg';
-import ImgCharizar from '../../../assets/img-charizard-min.png';
-import ImgPokemonTrainer from '../../../assets/img- pokémon_Trainer.png';
-import ImgIvysaur from '../../../assets/img-ivysaur.png';
+import PokemonLogo from '../../assets/logo-pokemon.svg';
+import ImgCharizar from '../../assets/img-charizard-min.png';
+import ImgPokemonTrainer from '../../assets/img- pokémon_Trainer.png';
+import ImgIvysaur from '../../assets/img-ivysaur.png';
 
 export function Header() {
   return (

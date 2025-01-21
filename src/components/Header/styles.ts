@@ -1,5 +1,5 @@
 import { styled, keyframes } from "@mui/material/styles";
-import BackgroundPokeball from "../../../assets/background-pokeball.svg";
+import BackgroundPokeball from "../../assets/background-pokeball.svg";
 
 const float = keyframes`
   0% {
