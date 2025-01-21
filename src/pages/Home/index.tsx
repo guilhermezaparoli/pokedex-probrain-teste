@@ -218,8 +218,6 @@ export function Home() {
             count={totalPages}
             page={currentPage}
             boundaryCount={1}
-            showFirstButton
-            showLastButton
             onChange={(e, value) => {
               fetchCardsData({ page: value, filterValue, typeName: typeSelected });
               scrollTo({ top: 500, behavior: 'smooth' });
