@@ -107,7 +107,6 @@ export const SelectFilter = styled(Select)(({ theme }) => ({
   borderRadius: "8px",
   border: `2px solid #4e6aff`,
   outline: "none",
-  backgroundColor: "#4e6aff",
   color: theme.palette.primary.main,
   fontSize: "1rem",
   "&::placeholder": {
